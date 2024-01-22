@@ -75,6 +75,11 @@ function downloadAll() {
             downloadLink.href = URL.createObjectURL(blob);
             downloadLink.download = 'drawings.zip';
             downloadLink.click();
+
+            drawings.length = 0;
+        })
+        .catch(error => {
+            console.log("Error generating ZIP:", error);
         });
 }
 
