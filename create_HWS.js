@@ -83,10 +83,12 @@ document.addEventListener('DOMContentLoaded', function () {
     canvas.addEventListener('mousedown', startPosition);
     canvas.addEventListener('mouseup', endPosition);
     canvas.addEventListener('mousemove', draw);
-    // 清除和保存按鈕的事件監聽
+    // 按鈕的事件監聽
+    const resetSizeButton = document.getElementById('reset_size');
     const clearButton = document.getElementById('clear_canvas');
     const saveButton = document.getElementById('save_canvas');
 
+    resetSizeButton.addEventListener('click', updateCanvasSize);
     clearButton.addEventListener('click', clearCanvas);
     saveButton.addEventListener('click', saveCanvas);
 });   
