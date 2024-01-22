@@ -1,0 +1,1 @@
+啟用 php.ini 的 extension=gd
