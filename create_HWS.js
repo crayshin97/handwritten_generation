@@ -1,5 +1,6 @@
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
+const drawings = [];
 let painting = false;
 let penSize = 2;
 
@@ -53,24 +54,28 @@ function clearCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height);
     setBlackBackground();
 }
-
 function saveCanvas() {
     const imageData = canvas.toDataURL('image/png');
+    const timestamp = new Date().getTime();
+    
+    drawings.push({ imageData, timestamp });
+    clearCanvas();
+}
+function downloadAll() {
+    const zip = new JSZip();
 
-    fetch('./saveImage.php', {
-        method: 'POST',
-        headers:{
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ imageData}),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Image saved: ", data.message);
-    })
-    .catch(error => {
-        console.error('Error saving image:', error);
+    drawings.forEach((drawing, index) => {
+        const base64Data = drawing.imageData.split(',')[1];
+        zip.file(`drawing_${drawing.timestamp}.png`, base64Data, { base64: true });
     });
+
+    zip.generateAsync({ type: 'blob' })
+        .then((blob) => {
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = 'drawings.zip';
+            downloadLink.click();
+        });
 }
 
 function updatePenSize(event) {
@@ -96,10 +101,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const resetSizeButton = document.getElementById('reset_size');   // 重設大小
     const clearButton = document.getElementById('clear_canvas');     // 清除
     const saveButton = document.getElementById('save_canvas');       // 儲存
+    const downloadButton = document.getElementById('download_image') // 下載
     const canvasPenSize = document.querySelector('#canvas_penSize'); // 畫筆大小
     
     resetSizeButton.addEventListener('click', updateCanvasSize);
     clearButton.addEventListener('click', clearCanvas);
     saveButton.addEventListener('click', saveCanvas);
+    downloadButton.addEventListener('click', downloadAll);
     canvasPenSize.addEventListener('input', (event) => {updatePenSize(event)});
 });   
