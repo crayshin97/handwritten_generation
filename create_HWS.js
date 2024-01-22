@@ -62,6 +62,9 @@ document.addEventListener('DOMContentLoaded', function () {
     canvas.addEventListener('mousedown', startPosition);
     canvas.addEventListener('mouseup', endPosition);
     canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('touchstart', startPosition);
+    canvas.addEventListener('touchend', endPosition);
+    canvas.addEventListener('touchmove', draw);
 
     // 清除和保存按鈕的事件監聽
     const clearButton = document.getElementById('clear_canvas');
