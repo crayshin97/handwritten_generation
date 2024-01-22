@@ -1,6 +1,7 @@
 const canvas = document.getElementById('canvas');
-var context;
+const context = canvas.getContext('2d');
 let painting = false;
+let penSize = 2;
 
 function updateCanvasSize() {
     const currentImageData = context.getImageData(0, 0, canvas.width, canvas.height);  // 保留原本內容
@@ -28,7 +29,7 @@ function draw(e) {
     // 防止手機上的滾動等干擾
     e.preventDefault();
 
-    context.lineWidth = 5;
+    context.lineWidth = penSize;
     context.lineCap = 'round';
     context.strokeStyle = '#fff';
 
@@ -71,24 +72,34 @@ function saveCanvas() {
         console.error('Error saving image:', error);
     });
 }
+
+function updatePenSize(event) {
+    const penSizeValue = document.querySelector('#canvas_penSize_value');
+
+    penSize = parseInt(event.target.value, 10);
+    penSizeValue.textContent = event.target.value;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
-    context = canvas.getContext('2d');
     painting = false;
     setBlackBackground();
     updateCanvasSize();
 
-    canvas.addEventListener('touchstart', startPosition);
+    // 建立手寫板寫入方式
+    canvas.addEventListener('touchstart', startPosition);  // 觸控操作
     canvas.addEventListener('touchend', endPosition);
     canvas.addEventListener('touchmove', draw);
-    canvas.addEventListener('mousedown', startPosition);
+    canvas.addEventListener('mousedown', startPosition);  // 滑鼠操作
     canvas.addEventListener('mouseup', endPosition);
     canvas.addEventListener('mousemove', draw);
-    // 按鈕的事件監聽
-    const resetSizeButton = document.getElementById('reset_size');
-    const clearButton = document.getElementById('clear_canvas');
-    const saveButton = document.getElementById('save_canvas');
 
+    const resetSizeButton = document.getElementById('reset_size');   // 重設大小
+    const clearButton = document.getElementById('clear_canvas');     // 清除
+    const saveButton = document.getElementById('save_canvas');       // 儲存
+    const canvasPenSize = document.querySelector('#canvas_penSize'); // 畫筆大小
+    
     resetSizeButton.addEventListener('click', updateCanvasSize);
     clearButton.addEventListener('click', clearCanvas);
     saveButton.addEventListener('click', saveCanvas);
+    canvasPenSize.addEventListener('input', (event) => {updatePenSize(event)});
 });   
