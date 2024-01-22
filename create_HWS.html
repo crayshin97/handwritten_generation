@@ -6,10 +6,19 @@
     <title>手寫符號建立</title>
 </head>
 <body>
-    <canvas id="canvas" width="300" height="300" style="border: 1px solid #000;"></canvas>
-    
-    <button id="clear_canvas">清除</button>
-    <button id="save_canvas">保留</button>
+    <center>
+    <div style="margin-bottom: 20px;">
+        <input type="number" id="canvas_height" value="400" style="width: 40px;">
+        <label>x</label>
+        <input type="number" id="canvas_width" value="400" style="width: 40px;">
+        <button onclick="updateCanvasSize()">變更尺寸</button>
+        <button id="clear_canvas">清除</button>
+        <button id="save_canvas">保留</button>
+    </div>
+
+    <canvas id="canvas" style="border: 1px solid #000;"></canvas>
+    </center>
+
 </body>
 
 <script src="create_HWS.js"></script>
