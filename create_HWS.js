@@ -17,14 +17,22 @@ document.addEventListener('DOMContentLoaded', function () {
     function draw(e) {
         if (!painting) return;
 
+        // 防止手機上的滾動等干擾
+        e.preventDefault();
+
         context.lineWidth = 5;
         context.lineCap = 'round';
         context.strokeStyle = '#fff';
 
-        context.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        // 在觸摸事件中使用 e.touches[0].clientX 和 e.touches[0].clientY
+        // 在滑鼠事件中使用 e.clientX 和 e.clientY
+        const x = e.touches ? e.touches[0].clientX : e.clientX;
+        const y = e.touches ? e.touches[0].clientY : e.clientY;
+
+        context.lineTo(x - canvas.offsetLeft, y - canvas.offsetTop);
         context.stroke();
         context.beginPath();
-        context.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        context.moveTo(x - canvas.offsetLeft, y - canvas.offsetTop);
     }
 
     function setBlackBackground() {
@@ -40,8 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function saveCanvas() {
         const imageData = canvas.toDataURL('image/png');
 
-        // console.log(imageData);
-        console.log(imageData.length);
         fetch('./saveImage.php', {
             method: 'POST',
             headers:{
@@ -58,7 +64,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Event listeners
+    canvas.addEventListener('touchstart', startPosition);
+    canvas.addEventListener('touchend', endPosition);
+    canvas.addEventListener('touchmove', draw);
     canvas.addEventListener('mousedown', startPosition);
     canvas.addEventListener('mouseup', endPosition);
     canvas.addEventListener('mousemove', draw);
