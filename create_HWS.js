@@ -1,4 +1,6 @@
 const canvas = document.getElementById('canvas');
+const symbolSelect = document.getElementById('symbol_select');
+const otherInput = document.getElementById('other_input');
 const context = canvas.getContext('2d');
 const drawings = [];
 let painting = false;
@@ -56,9 +58,28 @@ function clearCanvas() {
 }
 function saveCanvas() {
     const imageData = canvas.toDataURL('image/png');
-    const timestamp = new Date().getTime();
+    // 獲取當前時間戳
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份加1是因為月份是從0開始的
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const timestamp = `${year}${month}${day}${hours}${minutes}${seconds}`;
     
-    drawings.push({ imageData, timestamp });
+    var symbolSelectValue = symbolSelect.value;
+    if(symbolSelectValue === "其他"){
+        if(otherInput.value === ""){
+            alert("其他不能空白");
+            return;
+        }
+        symbolSelectValue = otherInput.value; 
+    }
+    
+    const filename = `${symbolSelectValue}_${timestamp}`;
+    drawings.push({imageData, filename});
+    console.log(drawings);
     clearCanvas();
 }
 function downloadAll() {
@@ -66,7 +87,7 @@ function downloadAll() {
 
     drawings.forEach((drawing, index) => {
         const base64Data = drawing.imageData.split(',')[1];
-        zip.file(`drawing_${drawing.timestamp}.png`, base64Data, { base64: true });
+        zip.file(`${drawing.filename}.png`, base64Data, { base64: true });
     });
 
     zip.generateAsync({ type: 'blob' })
@@ -90,6 +111,16 @@ function updatePenSize(event) {
     penSizeValue.textContent = event.target.value;
 }
 
+function showOtherInput() {
+    const otherDiv = document.getElementById('other_div');
+    if(symbolSelect.value === "其他")
+        otherDiv.style.display = "block";
+    else{
+        otherDiv.style.display = "none";
+        otherInput.value = "";
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     painting = false;
     setBlackBackground();
@@ -108,10 +139,30 @@ document.addEventListener('DOMContentLoaded', function () {
     const saveButton = document.getElementById('save_canvas');       // 儲存
     const downloadButton = document.getElementById('download_image') // 下載
     const canvasPenSize = document.querySelector('#canvas_penSize'); // 畫筆大小
-    
+
+
     resetSizeButton.addEventListener('click', updateCanvasSize);
     clearButton.addEventListener('click', clearCanvas);
     saveButton.addEventListener('click', saveCanvas);
     downloadButton.addEventListener('click', downloadAll);
     canvasPenSize.addEventListener('input', (event) => {updatePenSize(event)});
+
+    fetch('symbol_option.txt')  // 取得選項值
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            const options = data.split('\n');
+            options.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.text = option.trim();
+                symbolSelect.add(optionElement);
+            });
+            const optionElement = document.createElement('option');
+            optionElement.text = "其他";  // 加入固定的選項
+            symbolSelect.add(optionElement);
+        })
+        .catch(error => {
+            console.log("Error loading symbol_option.txt: ", error);
+        });
+    symbolSelect.addEventListener("change", showOtherInput);
 });   

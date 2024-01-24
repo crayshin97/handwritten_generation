@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="create_HWS.css">
     <title>手寫符號建立</title>
 </head>
 <body>
     <center>
-    <div style="margin-bottom: 20px;">
-        <input type="number" id="canvas_height" value="400" style="width: 40px;">
+    <div id="basic_operation">
+        <input type="number" id="canvas_height" value="400">
         <label>x</label>
-        <input type="number" id="canvas_width" value="400" style="width: 40px;">
+        <input type="number" id="canvas_width" value="400">
         <button id="reset_size">變更尺寸</button>
         <button id="clear_canvas">清除</button>
         <button id="save_canvas">儲存</button>
@@ -21,7 +22,13 @@
         <input type="range" id="canvas_penSize" min="2" max="5" value="2">
     </div>
 
-    <canvas id="canvas" style="border: 1px solid #000;"></canvas>
+    <div id="symbol_select_div">
+        <select id="symbol_select"></select>
+        <div id="other_div"><input type="text" id="other_input"></div>
+    </div>
+
+
+    <canvas id="canvas"></canvas>
     </center>
 
 </body>

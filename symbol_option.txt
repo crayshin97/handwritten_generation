@@ -1,0 +1,10 @@
+alpha
+beta
+gamma
+lambda
+mu
+phi
+pi
+sigma
+theta
+Detla
