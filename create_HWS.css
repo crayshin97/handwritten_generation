@@ -1,0 +1,22 @@
+#basic_operation{
+    margin-bottom: 20px;
+}
+input[type="number"]{
+    width: 40px;
+}
+#canvas_penSize_value{
+    margin-right: 5px;
+    margin-left: 5px;
+}
+#canvas{
+    border: 1px solid #000;
+}
+#symbol_select_div{
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin: 5px;
+}
+#other_div{
+    display: none;
+}
