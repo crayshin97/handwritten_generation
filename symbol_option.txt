@@ -8,3 +8,12 @@ pi
 sigma
 theta
 Detla
+exists
+forall
+infty
+in
+sum
+int
+pm
+geq
+leq
