@@ -17,3 +17,14 @@ int
 pm
 geq
 leq
+exclamstion
+left_parentheses
+right_parentheses
+left_brackets
+right_brackets
+left_braces
+right_braces
+more
+less
+equal
+neq
