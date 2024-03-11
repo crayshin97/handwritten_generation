@@ -28,3 +28,9 @@ more
 less
 equal
 neq
+add
+reduce
+times
+division
+div
+rightarrow
